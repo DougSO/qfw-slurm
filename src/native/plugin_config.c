@@ -271,11 +271,9 @@ int qfw_plugin_config_load(const char *path,
 		}
 		for (other = 0; other < index; other++) {
 			if (strcmp(config->resources[index].name,
-				config->resources[other].name) == 0 ||
-			    strcmp(config->resources[index].service_id,
-				config->resources[other].service_id) == 0) {
+				config->resources[other].name) == 0) {
 				set_error(error, error_size,
-					"resource mappings must be unique");
+					"resource names must be unique");
 				goto out;
 			}
 		}
