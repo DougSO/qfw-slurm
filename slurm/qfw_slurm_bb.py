@@ -51,13 +51,14 @@ class HelperError(RuntimeError):
 
 def parse_directive(path: Path) -> dict[str, str]:
     data = path.read_text(encoding="utf-8")
-    if len(data) > MAX_DIRECTIVE + 1:
-        raise HelperError("QFW directive exceeds 2048 bytes")
     lines = [line.strip() for line in data.splitlines() if line.strip()]
     qfw_lines = [line for line in lines if line.startswith("#QFW ")]
     if len(qfw_lines) != 1:
         raise HelperError("exactly one QFW directive is required")
-    tokens = qfw_lines[0].split()
+    directive = qfw_lines[0]
+    if len(directive) > MAX_DIRECTIVE:
+        raise HelperError("QFW directive exceeds 2048 bytes")
+    tokens = directive.split()
     if tokens[:2] != ["#QFW", "v=1"]:
         raise HelperError("unsupported QFW directive version")
     values: dict[str, str] = {}
